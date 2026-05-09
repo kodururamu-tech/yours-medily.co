@@ -78,6 +78,24 @@ export function PharmacyCard({ pharmacy, index }: { pharmacy: Pharmacy; index: n
           Call
         </a>
         <button
+          onClick={() => {
+            const dest = encodeURIComponent(`${name}, ${address}`);
+            const open = (origin?: string) => {
+              const url = origin
+                ? `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=driving`
+                : `https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`;
+              window.open(url, "_blank", "noopener,noreferrer");
+            };
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                (pos) => open(`${pos.coords.latitude},${pos.coords.longitude}`),
+                () => open(),
+                { timeout: 5000 }
+              );
+            } else {
+              open();
+            }
+          }}
           className="flex-1 inline-flex items-center justify-center gap-2 h-10 rounded-full text-primary-foreground text-sm font-semibold transition-transform hover:scale-[1.02]"
           style={{ background: "var(--gradient-hero)" }}
         >
