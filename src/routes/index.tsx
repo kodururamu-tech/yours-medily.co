@@ -45,9 +45,10 @@ function Index() {
         <nav className="hidden sm:flex items-center gap-7 text-sm text-muted-foreground">
           <a href="#how" className="hover:text-foreground transition">How it works</a>
           <a href="#why" className="hover:text-foreground transition">Why Medily</a>
-          <button className="px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition">
-            For pharmacies
-          </button>
+          <Link to="/signin" className="hover:text-foreground transition">Sign in</Link>
+          <Link to="/signin" className="px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition">
+            Get started
+          </Link>
         </nav>
       </header>
 
