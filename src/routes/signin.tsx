@@ -90,16 +90,45 @@ function SignInPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md bg-card border border-border rounded-3xl p-8 shadow-[var(--shadow-card)]"
         >
-          <div className="text-center mb-6">
-            <h1 className="font-display text-3xl font-semibold tracking-tight">
-              {mode === "signin" ? "Welcome back" : "Create your account"}
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {mode === "signin"
-                ? "Sign in to save pharmacies and track medicines."
-                : "Join Medily to find medicines near you, faster."}
-            </p>
-          </div>
+          {currentUser ? (
+            <div className="text-center py-4">
+              <div className="h-14 w-14 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
+                <User className="h-7 w-7" />
+              </div>
+              <h1 className="font-display text-2xl font-semibold tracking-tight">
+                You're signed in
+              </h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {currentUser.name} · {currentUser.email}
+              </p>
+              <button
+                onClick={signOut}
+                className="mt-6 inline-flex items-center gap-2 px-6 h-11 rounded-full text-destructive bg-destructive/10 font-semibold hover:bg-destructive/20 transition"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
+              <div className="mt-4">
+                <Link
+                  to="/"
+                  className="text-sm text-primary font-medium hover:underline"
+                >
+                  Go to home
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="font-display text-3xl font-semibold tracking-tight">
+                  {mode === "signin" ? "Welcome back" : "Create your account"}
+                </h1>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {mode === "signin"
+                    ? "Sign in to save pharmacies and track medicines."
+                    : "Join Medily to find medicines near you, faster."}
+                </p>
+              </div>
 
           <div className="grid grid-cols-2 p-1 rounded-full bg-secondary text-sm mb-6">
             <button
