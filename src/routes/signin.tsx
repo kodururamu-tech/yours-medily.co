@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Pill, Mail, Lock, User, ArrowRight } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { Pill, Mail, Lock, User, ArrowRight, LogOut } from "lucide-react";
+import { useState, useEffect, type FormEvent } from "react";
 
 export const Route = createFileRoute("/signin")({
   head: () => ({
@@ -23,6 +23,21 @@ function SignInPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("medily_user");
+      if (raw) setCurrentUser(JSON.parse(raw));
+    } catch {
+      setCurrentUser(null);
+    }
+  }, []);
+
+  const signOut = () => {
+    localStorage.removeItem("medily_user");
+    setCurrentUser(null);
+  };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -75,16 +90,45 @@ function SignInPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md bg-card border border-border rounded-3xl p-8 shadow-[var(--shadow-card)]"
         >
-          <div className="text-center mb-6">
-            <h1 className="font-display text-3xl font-semibold tracking-tight">
-              {mode === "signin" ? "Welcome back" : "Create your account"}
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {mode === "signin"
-                ? "Sign in to save pharmacies and track medicines."
-                : "Join Medily to find medicines near you, faster."}
-            </p>
-          </div>
+          {currentUser ? (
+            <div className="text-center py-4">
+              <div className="h-14 w-14 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
+                <User className="h-7 w-7" />
+              </div>
+              <h1 className="font-display text-2xl font-semibold tracking-tight">
+                You're signed in
+              </h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {currentUser.name} · {currentUser.email}
+              </p>
+              <button
+                onClick={signOut}
+                className="mt-6 inline-flex items-center gap-2 px-6 h-11 rounded-full text-destructive bg-destructive/10 font-semibold hover:bg-destructive/20 transition"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
+              <div className="mt-4">
+                <Link
+                  to="/"
+                  className="text-sm text-primary font-medium hover:underline"
+                >
+                  Go to home
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="font-display text-3xl font-semibold tracking-tight">
+                  {mode === "signin" ? "Welcome back" : "Create your account"}
+                </h1>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {mode === "signin"
+                    ? "Sign in to save pharmacies and track medicines."
+                    : "Join Medily to find medicines near you, faster."}
+                </p>
+              </div>
 
           <div className="grid grid-cols-2 p-1 rounded-full bg-secondary text-sm mb-6">
             <button
@@ -162,6 +206,8 @@ function SignInPage() {
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>
           </p>
+        </>
+      )}
         </motion.div>
       </main>
     </div>
