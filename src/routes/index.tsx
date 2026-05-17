@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Pill, MapPin, Zap, ShieldCheck, ArrowRight } from "lucide-react";
+import { Pill, MapPin, Zap, ShieldCheck, ArrowRight, LogOut, UserCircle } from "lucide-react";
 import { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { POPULAR_MEDICINES } from "@/lib/mock-data";
+import { AuthDialog } from "@/components/AuthDialog";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,6 +26,8 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = Route.useNavigate();
   const [recent] = useState<string[]>([]);
+  const [authOpen, setAuthOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   const onSearch = (q: string) => {
     navigate({ to: "/search", search: { q } });
@@ -45,10 +49,32 @@ function Index() {
         <nav className="hidden sm:flex items-center gap-7 text-sm text-muted-foreground">
           <a href="#how" className="hover:text-foreground transition">How it works</a>
           <a href="#why" className="hover:text-foreground transition">Why Medily</a>
-          <Link to="/signin" className="hover:text-foreground transition">Sign in</Link>
-          <Link to="/signin" className="px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition">
-            Get started
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-2 text-foreground font-medium">
+                <UserCircle className="h-4 w-4" />
+                {user.name}
+              </span>
+              <button
+                onClick={signOut}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-secondary transition"
+                title="Sign out"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <>
+              <button onClick={() => setAuthOpen(true)} className="hover:text-foreground transition">Sign in</button>
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition"
+              >
+                Get started
+              </button>
+            </>
+          )}
         </nav>
       </header>
 
@@ -192,6 +218,8 @@ function Index() {
         <p>© {new Date().getFullYear()} Medily. Care, closer.</p>
         <p className="opacity-70">Demo data shown for preview purposes.</p>
       </footer>
+
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 }
