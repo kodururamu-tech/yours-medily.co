@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Pill, Mail, Lock, User, ArrowRight } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { Pill, Mail, Lock, User, ArrowRight, LogOut } from "lucide-react";
+import { useState, useEffect, type FormEvent } from "react";
 
 export const Route = createFileRoute("/signin")({
   head: () => ({
