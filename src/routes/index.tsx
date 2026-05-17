@@ -218,6 +218,8 @@ function Index() {
         <p>© {new Date().getFullYear()} Medily. Care, closer.</p>
         <p className="opacity-70">Demo data shown for preview purposes.</p>
       </footer>
+
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 }
