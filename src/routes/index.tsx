@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Pill, MapPin, Zap, ShieldCheck, ArrowRight } from "lucide-react";
+import { Pill, MapPin, Zap, ShieldCheck, ArrowRight, LogOut, UserCircle } from "lucide-react";
 import { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { POPULAR_MEDICINES } from "@/lib/mock-data";
+import { AuthDialog } from "@/components/AuthDialog";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
