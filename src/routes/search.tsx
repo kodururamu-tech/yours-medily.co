@@ -85,6 +85,7 @@ function SearchPage() {
               onSearch={(nq) => navigate({ to: "/search", search: { q: nq } })}
             />
           </div>
+          <UserMenu />
         </div>
       </header>
 
