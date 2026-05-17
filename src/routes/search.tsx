@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { z } from "zod";
 import { SearchBar } from "@/components/SearchBar";
 import { PharmacyCard } from "@/components/PharmacyCard";
+import { UserMenu } from "@/components/UserMenu";
 import { searchPharmacies } from "@/lib/mock-data";
 
 const searchSchema = z.object({

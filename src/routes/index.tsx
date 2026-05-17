@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Pill, MapPin, Zap, ShieldCheck, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
+import { UserMenu } from "@/components/UserMenu";
 import { POPULAR_MEDICINES } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/")({
