@@ -23,6 +23,21 @@ function SignInPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("medily_user");
+      if (raw) setCurrentUser(JSON.parse(raw));
+    } catch {
+      setCurrentUser(null);
+    }
+  }, []);
+
+  const signOut = () => {
+    localStorage.removeItem("medily_user");
+    setCurrentUser(null);
+  };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
