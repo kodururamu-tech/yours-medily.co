@@ -206,6 +206,8 @@ function SignInPage() {
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>
           </p>
+        </>
+      )}
         </motion.div>
       </main>
     </div>
