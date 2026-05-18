@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiIdentifyMedicineRouteImport } from './routes/api/identify-medicine'
 
 const SigninRoute = SigninRouteImport.update({
   id: '/signin',
@@ -28,35 +29,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiIdentifyMedicineRoute = ApiIdentifyMedicineRouteImport.update({
+  id: '/api/identify-medicine',
+  path: '/api/identify-medicine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/search': typeof SearchRoute
   '/signin': typeof SigninRoute
+  '/api/identify-medicine': typeof ApiIdentifyMedicineRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/search': typeof SearchRoute
   '/signin': typeof SigninRoute
+  '/api/identify-medicine': typeof ApiIdentifyMedicineRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/search': typeof SearchRoute
   '/signin': typeof SigninRoute
+  '/api/identify-medicine': typeof ApiIdentifyMedicineRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/search' | '/signin'
+  fullPaths: '/' | '/search' | '/signin' | '/api/identify-medicine'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/search' | '/signin'
-  id: '__root__' | '/' | '/search' | '/signin'
+  to: '/' | '/search' | '/signin' | '/api/identify-medicine'
+  id: '__root__' | '/' | '/search' | '/signin' | '/api/identify-medicine'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SearchRoute: typeof SearchRoute
   SigninRoute: typeof SigninRoute
+  ApiIdentifyMedicineRoute: typeof ApiIdentifyMedicineRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/identify-medicine': {
+      id: '/api/identify-medicine'
+      path: '/api/identify-medicine'
+      fullPath: '/api/identify-medicine'
+      preLoaderRoute: typeof ApiIdentifyMedicineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SearchRoute: SearchRoute,
   SigninRoute: SigninRoute,
+  ApiIdentifyMedicineRoute: ApiIdentifyMedicineRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
