@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { User, LogOut, LogIn } from "lucide-react";
+import { auth, isFirebaseEnabled } from "@/lib/firebase";
 
 interface UserData {
   name: string;
@@ -32,7 +33,14 @@ export function UserMenu() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  const signOut = () => {
+  const signOut = async () => {
+    if (isFirebaseEnabled() && auth) {
+      try {
+        await auth.signOut();
+      } catch (err) {
+        console.error("Firebase signout error:", err);
+      }
+    }
     localStorage.removeItem("medily_user");
     setUser(null);
     setOpen(false);

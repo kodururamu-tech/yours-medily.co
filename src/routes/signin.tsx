@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { Pill, Mail, Lock, User, ArrowRight, LogOut } from "lucide-react";
 import { useState, useEffect, type FormEvent } from "react";
 import { useLanguage, type Language } from "../hooks/useLanguage";
+import { auth, db, isFirebaseEnabled } from "@/lib/firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export const Route = createFileRoute("/signin")({
   head: () => ({
@@ -36,12 +39,19 @@ function SignInPage() {
     }
   }, []);
 
-  const signOut = () => {
+  const signOut = async () => {
+    if (isFirebaseEnabled() && auth) {
+      try {
+        await auth.signOut();
+      } catch (err) {
+        console.error("Firebase signout error:", err);
+      }
+    }
     localStorage.removeItem("medily_user");
     setCurrentUser(null);
   };
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     if (!email || !password || (mode === "signup" && !name)) {
@@ -53,19 +63,62 @@ function SignInPage() {
       return;
     }
     setLoading(true);
-    // Demo only — no backend yet
-    setTimeout(() => {
-      try {
+
+    if (!isFirebaseEnabled() || !auth) {
+      setError("Firebase is not configured. Please configure your Firebase configuration via the database settings button at the top of the page first.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      if (mode === "signup") {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: name });
+        
+        // Save user details in Firestore "users" collection
+        if (db) {
+          try {
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+              uid: userCredential.user.uid,
+              name,
+              email,
+              createdAt: new Date().toISOString()
+            });
+          } catch (fsError) {
+            console.warn("Firestore user profile creation skipped due to permissions. User registration will continue using Auth/local storage:", fsError);
+          }
+        }
+
         localStorage.setItem(
           "medily_user",
-          JSON.stringify({ name: name || email.split("@")[0], email }),
+          JSON.stringify({ name: name, email }),
         );
-      } catch {
-        // ignore
+      } else {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        localStorage.setItem(
+          "medily_user",
+          JSON.stringify({ name: userCredential.user.displayName || email.split("@")[0], email }),
+        );
       }
       setLoading(false);
       navigate({ to: "/" });
-    }, 600);
+    } catch (err: any) {
+      console.error(err);
+      let msg = err.message || "Authentication failed.";
+      if (err.code === "auth/email-already-in-use") {
+        msg = "This email is already in use.";
+      } else if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password") {
+        msg = "Invalid email or password.";
+      } else if (err.code === "auth/invalid-email") {
+        msg = "Please enter a valid email address.";
+      } else if (err.code === "auth/configuration-not-found" || err.code === "auth/operation-not-allowed") {
+        msg = "Email/Password authentication is not enabled in your Firebase Console. Go to Authentication > Sign-in method and enable Email/Password.";
+      } else if (err.code === "permission-denied" || err.message?.includes("permission")) {
+        msg = "Firestore write permission denied. Make sure your Firestore Security Rules allow writes to the 'users' collection.";
+      }
+      setError(msg);
+      setLoading(false);
+    }
   };
 
   return (

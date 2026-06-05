@@ -6,11 +6,12 @@ import { z } from "zod";
 import { SearchBar } from "@/components/SearchBar";
 import { PharmacyCard } from "@/components/PharmacyCard";
 import { UserMenu } from "@/components/UserMenu";
-import { searchPharmacies } from "@/lib/mock-data";
 import { useLanguage } from "../hooks/useLanguage";
 import { toast } from "sonner";
 import { useLocation, CITY_PRESETS } from "../hooks/useLocation";
 import { LocationSelector } from "@/components/LocationSelector";
+import { FirebaseSetup } from "@/components/FirebaseSetup";
+import { isFirebaseEnabled, searchFirebaseMedicines } from "@/lib/firebase";
 
 const searchSchema = z.object({
   q: z.string().optional().default(""),
@@ -105,113 +106,41 @@ function SearchPage() {
         return;
       }
 
-      if (!coords) {
-        const rawResults = searchPharmacies(q);
-        setResults(rawResults);
+      if (!isFirebaseEnabled()) {
+        toast.error("Firebase is not configured. Please use the Database Settings panel to configure Firebase first.");
+        setResults([]);
         return;
       }
 
       setLoadingReal(true);
       try {
-        const overpassQuery = `[out:json];node(around:5000,${coords.lat},${coords.lng})[amenity=pharmacy];out 10;`;
-        const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
-        
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Overpass API failed");
-        
-        const data = await response.json();
-        const nodes = data.elements || [];
-
-        if (nodes.length > 0 && active) {
-          const basePrice = 15 + (localHash(q) % 80);
-          
-          const realResults = nodes.map((node: any, index: number) => {
-            const pId = `osm-${node.id}`;
-            const seed = localHash(q + pId);
-            const available = seed % 5 !== 0; 
-            const variance = (seed % 12) - 6;
-            
-            let addr = "Nearby Area";
-            if (node.tags) {
-              const street = node.tags["addr:street"];
-              const housenumber = node.tags["addr:housenumber"];
-              const suburb = node.tags["addr:suburb"] || node.tags["addr:neighbourhood"];
-              if (street) {
-                addr = housenumber ? `${housenumber} ${street}` : street;
-              } else if (suburb) {
-                addr = suburb;
+        const fbResults = await searchFirebaseMedicines(q);
+        if (active) {
+          if (coords) {
+            const mapped = fbResults.map((p) => {
+              if (p.lat && p.lng) {
+                const calculatedDistance = calculateHaversineDistance(
+                  coords.lat,
+                  coords.lng,
+                  p.lat,
+                  p.lng
+                );
+                return { ...p, distanceKm: calculatedDistance };
               }
-            }
-
-            const calculatedDistance = calculateHaversineDistance(
-              coords.lat,
-              coords.lng,
-              node.lat,
-              node.lon
-            );
-
-            return {
-              id: pId,
-              name: node.tags?.name || `Pharmacy near ${cityName || "you"}`,
-              address: addr,
-              phone: node.tags?.phone || node.tags?.["contact:phone"] || `+91 98${localHash(pId) % 100000000}`,
-              hours: node.tags?.opening_hours || "8:00 AM – 10:00 PM",
-              open: node.tags?.opening_hours ? true : (seed % 3 !== 0),
-              rating: Number((4.0 + (localHash(pId) % 10) / 10).toFixed(1)),
-              available,
-              price: available ? Math.max(8, basePrice + variance) : undefined,
-              stock: available ? 5 + (seed % 60) : 0,
-              lat: node.lat,
-              lng: node.lon,
-              distanceKm: calculatedDistance
-            };
-          });
-
-          realResults.sort((a: any, b: any) => {
-            if (a.available !== b.available) return a.available ? -1 : 1;
-            return a.distanceKm - b.distanceKm;
-          });
-
-          setResults(realResults);
-        } else if (active) {
-          useFallbackMock();
+              return p;
+            });
+            setResults(mapped);
+          } else {
+            setResults(fbResults);
+          }
         }
       } catch (error) {
-        console.error("Error fetching real pharmacies:", error);
-        if (active) {
-          useFallbackMock();
-        }
+        console.error("Error fetching from Firebase:", error);
+        toast.error("Firebase fetch failed. Please check your Firestore connection/rules.");
+        setResults([]);
       } finally {
         if (active) setLoadingReal(false);
       }
-    };
-
-    const useFallbackMock = () => {
-      const rawResults = searchPharmacies(q || "");
-      if (!coords) {
-        setResults(rawResults);
-        return;
-      }
-      const mapped = rawResults.map((p, index) => {
-        const offset = PHARMACY_COORDS_OFFSETS[p.id] || { lat: 0.01, lng: 0.01 };
-        const pharmacyLat = coords.lat + offset.lat;
-        const pharmacyLng = coords.lng + offset.lng;
-        const calculatedDistance = calculateHaversineDistance(
-          coords.lat,
-          coords.lng,
-          pharmacyLat,
-          pharmacyLng
-        );
-        const localizedAddress = getLocalizedAddress(p.id, index, cityName);
-        return {
-          ...p,
-          address: localizedAddress || p.address,
-          distanceKm: calculatedDistance,
-          lat: pharmacyLat,
-          lng: pharmacyLng
-        };
-      });
-      setResults(mapped);
     };
 
     fetchPharmacies();
@@ -251,34 +180,55 @@ function SearchPage() {
     <div className="min-h-screen bg-background">
       {/* Top bar */}
       <header className="sticky top-0 z-20 backdrop-blur-lg bg-background/80 border-b border-border">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-4">
-          <Link
-            to="/"
-            className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-foreground hover:bg-secondary/70 transition shrink-0"
-            aria-label="Back"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-          <Link to="/" className="hidden md:flex items-center gap-2 shrink-0">
-            <div
-              className="h-8 w-8 rounded-lg flex items-center justify-center text-primary-foreground"
-              style={{ background: "var(--gradient-hero)" }}
-            >
-              <Pill className="h-4 w-4" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          {/* Top/Left Row: Back Button, Logo, and Quick Controls */}
+          <div className="flex items-center justify-between sm:justify-start gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <Link
+                to="/"
+                className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-secondary flex items-center justify-center text-foreground hover:bg-secondary/70 transition shrink-0"
+                aria-label="Back"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+              <Link to="/" className="hidden sm:flex items-center gap-2 shrink-0">
+                <div
+                  className="h-8 w-8 rounded-lg flex items-center justify-center text-primary-foreground"
+                  style={{ background: "var(--gradient-hero)" }}
+                >
+                  <Pill className="h-4 w-4" />
+                </div>
+                <span className="font-display text-base sm:text-lg font-semibold">Medily</span>
+              </Link>
             </div>
-            <span className="font-display text-lg font-semibold">Medily</span>
-          </Link>
+            
+            {/* Quick Action Badges / Controls in mobile (right-aligned in first row) */}
+            <div className="flex items-center gap-2 sm:hidden shrink-0">
+              <LocationSelector />
+              <FirebaseSetup />
+              <UserMenu />
+            </div>
+          </div>
           
-          <LocationSelector />
+          {/* Geolocation selector & Database selector (hidden on mobile first row, shown on desktop) */}
+          <div className="hidden sm:flex items-center gap-3 shrink-0">
+            <LocationSelector />
+            <FirebaseSetup />
+          </div>
 
-          <div className="flex-1 max-w-xl ml-auto">
+          {/* Search Input Bar (full-width on mobile, flex-1 on desktop) */}
+          <div className="w-full sm:flex-1 sm:max-w-xl sm:ml-auto">
             <SearchBar
               size="md"
               initial={q}
               onSearch={(nq) => navigate({ to: "/search", search: { q: nq } })}
             />
           </div>
-          <UserMenu />
+
+          {/* User Menu on desktop */}
+          <div className="hidden sm:block shrink-0">
+            <UserMenu />
+          </div>
         </div>
       </header>
 

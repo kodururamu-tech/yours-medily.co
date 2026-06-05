@@ -7,6 +7,7 @@ import { UserMenu } from "@/components/UserMenu";
 import { POPULAR_MEDICINES } from "@/lib/mock-data";
 import { useLanguage } from "../hooks/useLanguage";
 import { LocationSelector } from "@/components/LocationSelector";
+import { FirebaseSetup } from "@/components/FirebaseSetup";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,6 +49,7 @@ function Index() {
             <span className="font-display text-xl font-semibold tracking-tight">Medily</span>
           </Link>
           <LocationSelector />
+          <FirebaseSetup />
         </div>
         <nav className="hidden sm:flex items-center gap-7 text-sm text-muted-foreground">
           <a href="#how" className="hover:text-foreground transition">{t("nav.how")}</a>
