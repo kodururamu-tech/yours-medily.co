@@ -1,14 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
-
-import appCss from "../styles.css?url";
+import { Outlet, Link, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
+import { LanguageProvider } from "../hooks/useLanguage";
+import { LocationProvider } from "../hooks/useLocation";
 
 function NotFoundComponent() {
   return (
@@ -68,58 +62,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Pharmacy Pal is a smart healthcare app that helps users quickly find medicines in nearby pharmacies." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Pharmacy Pal is a smart healthcare app that helps users quickly find medicines in nearby pharmacies." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Pharmacy Pal is a smart healthcare app that helps users quickly find medicines in nearby pharmacies." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/18173b02-0b0e-4da4-a7b6-109ee28cdbab/id-preview-9d6653f2--da43072e-a434-4d86-a5e7-ac851a788360.lovable.app-1778313996247.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/18173b02-0b0e-4da4-a7b6-109ee28cdbab/id-preview-9d6653f2--da43072e-a434-4d86-a5e7-ac851a788360.lovable.app-1778313996247.png" },
-    ],
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
-      },
-      { rel: "stylesheet", href: appCss },
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
-import { Toaster } from "@/components/ui/sonner";
-import { LanguageProvider } from "../hooks/useLanguage";
-import { LocationProvider } from "../hooks/useLocation";
-
-
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Toaster position="top-center" closeButton richColors />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -129,6 +75,7 @@ function RootComponent() {
       <LanguageProvider>
         <LocationProvider>
           <Outlet />
+          <Toaster position="top-center" closeButton richColors />
         </LocationProvider>
       </LanguageProvider>
     </QueryClientProvider>

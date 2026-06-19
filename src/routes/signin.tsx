@@ -4,14 +4,21 @@ import { Pill, Mail, Lock, User, ArrowRight, LogOut } from "lucide-react";
 import { useState, useEffect, type FormEvent } from "react";
 import { useLanguage, type Language } from "../hooks/useLanguage";
 import { auth, db, isFirebaseEnabled } from "@/lib/firebase";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 export const Route = createFileRoute("/signin")({
   head: () => ({
     meta: [
       { title: "Sign in — Medily" },
-      { name: "description", content: "Sign in or create your Medily account to save pharmacies and track medicines." },
+      {
+        name: "description",
+        content: "Sign in or create your Medily account to save pharmacies and track medicines.",
+      },
       { property: "og:title", content: "Sign in — Medily" },
       { property: "og:description", content: "Access your Medily account." },
     ],
@@ -65,7 +72,9 @@ function SignInPage() {
     setLoading(true);
 
     if (!isFirebaseEnabled() || !auth) {
-      setError("Firebase is not configured. Please configure your Firebase configuration via the database settings button at the top of the page first.");
+      setError(
+        "Firebase is not configured. Please configure your Firebase configuration via the database settings button at the top of the page first.",
+      );
       setLoading(false);
       return;
     }
@@ -74,7 +83,7 @@ function SignInPage() {
       if (mode === "signup") {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
-        
+
         // Save user details in Firestore "users" collection
         if (db) {
           try {
@@ -82,17 +91,17 @@ function SignInPage() {
               uid: userCredential.user.uid,
               name,
               email,
-              createdAt: new Date().toISOString()
+              createdAt: new Date().toISOString(),
             });
           } catch (fsError) {
-            console.warn("Firestore user profile creation skipped due to permissions. User registration will continue using Auth/local storage:", fsError);
+            console.warn(
+              "Firestore user profile creation skipped due to permissions. User registration will continue using Auth/local storage:",
+              fsError,
+            );
           }
         }
 
-        localStorage.setItem(
-          "medily_user",
-          JSON.stringify({ name: name, email }),
-        );
+        localStorage.setItem("medily_user", JSON.stringify({ name: name, email }));
       } else {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         localStorage.setItem(
@@ -111,10 +120,15 @@ function SignInPage() {
         msg = "Invalid email or password.";
       } else if (err.code === "auth/invalid-email") {
         msg = "Please enter a valid email address.";
-      } else if (err.code === "auth/configuration-not-found" || err.code === "auth/operation-not-allowed") {
-        msg = "Email/Password authentication is not enabled in your Firebase Console. Go to Authentication > Sign-in method and enable Email/Password.";
+      } else if (
+        err.code === "auth/configuration-not-found" ||
+        err.code === "auth/operation-not-allowed"
+      ) {
+        msg =
+          "Email/Password authentication is not enabled in your Firebase Console. Go to Authentication > Sign-in method and enable Email/Password.";
       } else if (err.code === "permission-denied" || err.message?.includes("permission")) {
-        msg = "Firestore write permission denied. Make sure your Firestore Security Rules allow writes to the 'users' collection.";
+        msg =
+          "Firestore write permission denied. Make sure your Firestore Security Rules allow writes to the 'users' collection.";
       }
       setError(msg);
       setLoading(false);
@@ -164,10 +178,7 @@ function SignInPage() {
                 {t("auth.signout")}
               </button>
               <div className="mt-4">
-                <Link
-                  to="/"
-                  className="text-sm text-primary font-medium hover:underline"
-                >
+                <Link to="/" className="text-sm text-primary font-medium hover:underline">
                   {t("auth.gohome")}
                 </Link>
               </div>
@@ -179,9 +190,7 @@ function SignInPage() {
                   {mode === "signin" ? t("auth.welcome") : t("auth.createAccount")}
                 </h1>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {mode === "signin"
-                    ? t("auth.signinSubtitle")
-                    : t("auth.signupSubtitle")}
+                  {mode === "signin" ? t("auth.signinSubtitle") : t("auth.signupSubtitle")}
                 </p>
               </div>
 
@@ -190,7 +199,9 @@ function SignInPage() {
                   type="button"
                   onClick={() => setMode("signin")}
                   className={`h-9 rounded-full font-medium transition cursor-pointer ${
-                    mode === "signin" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+                    mode === "signin"
+                      ? "bg-card shadow-sm text-foreground"
+                      : "text-muted-foreground"
                   }`}
                 >
                   {t("auth.signin")}
@@ -199,7 +210,9 @@ function SignInPage() {
                   type="button"
                   onClick={() => setMode("signup")}
                   className={`h-9 rounded-full font-medium transition cursor-pointer ${
-                    mode === "signup" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+                    mode === "signup"
+                      ? "bg-card shadow-sm text-foreground"
+                      : "text-muted-foreground"
                   }`}
                 >
                   {t("auth.signup")}
@@ -246,7 +259,11 @@ function SignInPage() {
                   className="w-full h-11 rounded-full text-primary-foreground font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-60 hover:opacity-95 transition cursor-pointer"
                   style={{ background: "var(--gradient-hero)" }}
                 >
-                  {loading ? t("auth.wait") : mode === "signin" ? t("auth.signin") : t("auth.createAccountBtn")}
+                  {loading
+                    ? t("auth.wait")
+                    : mode === "signin"
+                      ? t("auth.signin")
+                      : t("auth.createAccountBtn")}
                   {!loading && <ArrowRight className="h-4 w-4" />}
                 </button>
               </form>
@@ -275,7 +292,8 @@ function SignInPage() {
                 onChange={(e) => setLanguage(e.target.value as Language)}
                 className="w-full bg-secondary border border-border rounded-full h-9 px-4 pr-8 text-xs font-semibold text-foreground outline-none focus:border-primary/40 appearance-none cursor-pointer"
                 style={{
-                  backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')",
+                  backgroundImage:
+                    "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "right 12px top 50%",
                   backgroundSize: "8px auto",

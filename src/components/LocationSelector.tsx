@@ -48,7 +48,9 @@ export function LocationSelector() {
               )}
               <span>Detect Current Location</span>
             </div>
-            <span className="text-[10px] text-muted-foreground bg-secondary px-1.5 py-0.5 rounded-md">GPS</span>
+            <span className="text-[10px] text-muted-foreground bg-secondary px-1.5 py-0.5 rounded-md">
+              GPS
+            </span>
           </button>
 
           <div className="my-1.5 border-t border-border" />

@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { Database, CheckCircle, AlertTriangle, RefreshCw, Trash2, Key, HelpCircle } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import {
+  Database,
+  CheckCircle,
+  AlertTriangle,
+  RefreshCw,
+  Trash2,
+  Key,
+  HelpCircle,
+} from "lucide-react";
 import { isFirebaseConfigured, getFirebaseConfig, seedFirebase } from "@/lib/firebase";
 import { toast } from "sonner";
 
@@ -33,9 +48,9 @@ export function FirebaseSetup() {
         "storageBucket",
         "messagingSenderId",
         "appId",
-        "measurementId"
+        "measurementId",
       ];
-      
+
       const extracted: Record<string, string> = {};
       for (const key of keys) {
         const regex = new RegExp(`['"]?${key}['"]?\\s*[:=]\\s*['"]([^'"]+)['"]`);
@@ -55,9 +70,9 @@ export function FirebaseSetup() {
           const end = cleaned.lastIndexOf("}") + 1;
           cleaned = cleaned.substring(start, end);
         }
-        
-        cleaned = cleaned.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1');
-        
+
+        cleaned = cleaned.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "$1");
+
         try {
           parsedConfig = JSON.parse(cleaned);
         } catch {
@@ -69,7 +84,7 @@ export function FirebaseSetup() {
       }
 
       const requiredKeys = ["apiKey", "projectId"];
-      const missing = requiredKeys.filter(k => !parsedConfig?.[k]);
+      const missing = requiredKeys.filter((k) => !parsedConfig?.[k]);
 
       if (missing.length > 0) {
         toast.error(`Invalid Firebase config: missing ${missing.join(", ")}`);
@@ -84,7 +99,9 @@ export function FirebaseSetup() {
       }, 1000);
     } catch (err: any) {
       console.error(err);
-      toast.error("Failed to parse config. Please make sure it is a valid JSON object or script snippet.");
+      toast.error(
+        "Failed to parse config. Please make sure it is a valid JSON object or script snippet.",
+      );
     }
   };
 
@@ -105,7 +122,9 @@ export function FirebaseSetup() {
     if (success) {
       toast.success("Firestore seeded successfully with default pharmacies and medicines!");
     } else {
-      toast.warning("Seeding skipped or failed (collections may already contain data or Firebase permissions denied).");
+      toast.warning(
+        "Seeding skipped or failed (collections may already contain data or Firebase permissions denied).",
+      );
     }
   };
 
@@ -118,7 +137,9 @@ export function FirebaseSetup() {
         >
           <Database className="h-3.5 w-3.5" />
           <span>DB: Firebase</span>
-          <span className={`h-1.5 w-1.5 rounded-full ${isConfigured ? "bg-success" : "bg-destructive"}`} />
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${isConfigured ? "bg-success" : "bg-destructive"}`}
+          />
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-md rounded-3xl border border-border bg-card p-6 shadow-2xl">
@@ -127,26 +148,35 @@ export function FirebaseSetup() {
             <div className="h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
               <Database className="h-5 w-5" />
             </div>
-            <DialogTitle className="text-xl font-bold tracking-tight">Database Settings</DialogTitle>
+            <DialogTitle className="text-xl font-bold tracking-tight">
+              Database Settings
+            </DialogTitle>
           </div>
           <DialogDescription className="text-sm text-muted-foreground">
-            Configure your application to retrieve medicines and stores from your own Firebase project.
+            Configure your application to retrieve medicines and stores from your own Firebase
+            project.
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-4 space-y-4">
           {/* Status Panel */}
-          <div className={`p-4 rounded-2xl border ${isConfigured ? "bg-success/5 border-success/20 text-success-foreground" : "bg-destructive/5 border-destructive/20 text-destructive-foreground"} flex items-start gap-3`}>
+          <div
+            className={`p-4 rounded-2xl border ${isConfigured ? "bg-success/5 border-success/20 text-success-foreground" : "bg-destructive/5 border-destructive/20 text-destructive-foreground"} flex items-start gap-3`}
+          >
             {isConfigured ? (
               <>
                 <CheckCircle className="h-5 w-5 text-success shrink-0 mt-0.5" />
                 <div className="text-sm">
                   <p className="font-semibold text-foreground">Connected to Firebase</p>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Project ID: <span className="font-mono bg-card px-1 py-0.5 rounded border">{currentConfig?.projectId}</span>
+                    Project ID:{" "}
+                    <span className="font-mono bg-card px-1 py-0.5 rounded border">
+                      {currentConfig?.projectId}
+                    </span>
                   </p>
                   <p className="text-muted-foreground text-xs mt-1">
-                    Authentication and Firestore are active. Searches are queried live from your database.
+                    Authentication and Firestore are active. Searches are queried live from your
+                    database.
                   </p>
                 </div>
               </>
@@ -170,9 +200,23 @@ export function FirebaseSetup() {
               <span>How to configure Firebase:</span>
             </div>
             <ol className="list-decimal list-inside space-y-1 ml-1">
-              <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium">Firebase Console</a>.</li>
+              <li>
+                Go to the{" "}
+                <a
+                  href="https://console.firebase.google.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Firebase Console
+                </a>
+                .
+              </li>
               <li>Add a Web App to your project.</li>
-              <li>Copy the <code className="bg-card px-1 py-0.5 border rounded">firebaseConfig</code> Javascript object.</li>
+              <li>
+                Copy the <code className="bg-card px-1 py-0.5 border rounded">firebaseConfig</code>{" "}
+                Javascript object.
+              </li>
               <li>Paste the code or JSON object below and save.</li>
             </ol>
           </div>

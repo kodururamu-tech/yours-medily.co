@@ -21,18 +21,22 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "hero.livestock": "Live stock from 2,400+ pharmacies",
     "hero.title1": "Find any medicine,",
     "hero.title2": "in minutes — not hours.",
-    "hero.subtitle": "Stop running shop to shop. Search a medicine and see real-time availability, prices, and directions to nearby pharmacies.",
+    "hero.subtitle":
+      "Stop running shop to shop. Search a medicine and see real-time availability, prices, and directions to nearby pharmacies.",
     "hero.placeholder": "Search any medicine, e.g. Paracetamol",
     "hero.searchBtn": "Search",
     "hero.try": "Try:",
 
     // Features
     "features.instant.title": "Instant results",
-    "features.instant.desc": "Search once, see every nearby pharmacy with live stock in under a second.",
+    "features.instant.desc":
+      "Search once, see every nearby pharmacy with live stock in under a second.",
     "features.distance.title": "Sorted by distance",
-    "features.distance.desc": "We show you the closest store with the best price first — saving travel time.",
+    "features.distance.desc":
+      "We show you the closest store with the best price first — saving travel time.",
     "features.verified.title": "Verified pharmacies",
-    "features.verified.desc": "Every listing is a licensed pharmacy with up-to-date inventory and pricing.",
+    "features.verified.desc":
+      "Every listing is a licensed pharmacy with up-to-date inventory and pricing.",
 
     // How it works
     "how.title": "Three steps between you and your medicine.",
@@ -97,8 +101,9 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "image.identified": "Medicine Successfully Identified",
     "image.match": "Match",
     "image.searchStores": "Search Stores for",
-    "image.disclaimer": "Disclaimer: Image identification is simulated for preview. Always consult a licensed pharmacist or physician to verify medications.",
-    
+    "image.disclaimer":
+      "Disclaimer: Image identification is simulated for preview. Always consult a licensed pharmacist or physician to verify medications.",
+
     "voice.title": "Voice Assistant",
     "voice.listening": "LISTENING...",
     "voice.say": "Say medicine name, e.g. Paracetamol",
@@ -115,7 +120,7 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.opennow": "Open now",
     "card.closed": "Closed",
     "card.call": "Call",
-    "card.directions": "Directions"
+    "card.directions": "Directions",
   },
   es: {
     // Nav
@@ -129,18 +134,22 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "hero.livestock": "Inventario en vivo de más de 2400 farmacias",
     "hero.title1": "Encuentra cualquier medicamento,",
     "hero.title2": "en minutos — no en horas.",
-    "hero.subtitle": "Deja de correr de tienda en tienda. Busca un medicamento y consulta la disponibilidad, precios y direcciones en tiempo real a las farmacias cercanas.",
+    "hero.subtitle":
+      "Deja de correr de tienda en tienda. Busca un medicamento y consulta la disponibilidad, precios y direcciones en tiempo real a las farmacias cercanas.",
     "hero.placeholder": "Buscar cualquier medicamento, ej. Paracetamol",
     "hero.searchBtn": "Buscar",
     "hero.try": "Probar:",
 
     // Features
     "features.instant.title": "Resultados instantáneos",
-    "features.instant.desc": "Busca una vez, mira cada farmacia cercana con stock en vivo en menos de un segundo.",
+    "features.instant.desc":
+      "Busca una vez, mira cada farmacia cercana con stock en vivo en menos de un segundo.",
     "features.distance.title": "Ordenado por distancia",
-    "features.distance.desc": "Te mostramos primero la tienda más cercana con el mejor precio, ahorrando tiempo de viaje.",
+    "features.distance.desc":
+      "Te mostramos primero la tienda más cercana con el mejor precio, ahorrando tiempo de viaje.",
     "features.verified.title": "Farmacias verificadas",
-    "features.verified.desc": "Cada listado es una farmacia autorizada con inventario y precios actualizados.",
+    "features.verified.desc":
+      "Cada listado es una farmacia autorizada con inventario y precios actualizados.",
 
     // How it works
     "how.title": "Tres pasos entre tú y tu medicina.",
@@ -198,14 +207,16 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     // Image/Voice search modals
     "image.title": "Escáner de diagnóstico fotográfico",
     "image.upload": "Cargar foto del medicamento",
-    "image.drag": "Arrastre y suelte una imagen de su caja/frasco de medicamento o elija un archivo local.",
+    "image.drag":
+      "Arrastre y suelte una imagen de su caja/frasco de medicamento o elija un archivo local.",
     "image.browse": "Examinar fotos",
     "image.webcam": "Usar cámara web",
     "image.demo": "O pruebe una muestra de medicamento",
     "image.identified": "Medicamento identificado con éxito",
     "image.match": "Coincidencia",
     "image.searchStores": "Buscar tiendas para",
-    "image.disclaimer": "Descargo de responsabilidad: La identificación de la imagen es simulada para la vista previa. Consulte siempre a un farmacéutico o médico para verificar los medicamentos.",
+    "image.disclaimer":
+      "Descargo de responsabilidad: La identificación de la imagen es simulada para la vista previa. Consulte siempre a un farmacéutico o médico para verificar los medicamentos.",
 
     "voice.title": "Asistente de voz",
     "voice.listening": "ESCUCHANDO...",
@@ -223,7 +234,7 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.opennow": "Abierto ahora",
     "card.closed": "Cerrado",
     "card.call": "Llamar",
-    "card.directions": "Cómo llegar"
+    "card.directions": "Cómo llegar",
   },
   hi: {
     // Nav
@@ -237,18 +248,22 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "hero.livestock": "2,400+ फार्मेसियों से लाइव स्टॉक",
     "hero.title1": "कोई भी दवा खोजें,",
     "hero.title2": "मिनटों में — घंटों में नहीं।",
-    "hero.subtitle": "दुकान-दुकान दौड़ना बंद करें। दवा खोजें और वास्तविक समय में उपलब्धता, कीमतें और नजदीकी फार्मेसियों के दिशा-निर्देश देखें।",
+    "hero.subtitle":
+      "दुकान-दुकान दौड़ना बंद करें। दवा खोजें और वास्तविक समय में उपलब्धता, कीमतें और नजदीकी फार्मेसियों के दिशा-निर्देश देखें।",
     "hero.placeholder": "कोई भी दवा खोजें, जैसे. पैरासिटामोल",
     "hero.searchBtn": "खोजें",
     "hero.try": "कोशिश करें:",
 
     // Features
     "features.instant.title": "तुरंत परिणाम",
-    "features.instant.desc": "एक बार खोजें, एक सेकंड से भी कम समय में लाइव स्टॉक के साथ हर नजदीकी फार्मेसी देखें।",
+    "features.instant.desc":
+      "एक बार खोजें, एक सेकंड से भी कम समय में लाइव स्टॉक के साथ हर नजदीकी फार्मेसी देखें।",
     "features.distance.title": "दूरी के अनुसार क्रमबद्ध",
-    "features.distance.desc": "हम आपको सबसे पहले सबसे अच्छी कीमत वाली सबसे नजदीकी दुकान दिखाते हैं — यात्रा का समय बचाते हैं।",
+    "features.distance.desc":
+      "हम आपको सबसे पहले सबसे अच्छी कीमत वाली सबसे नजदीकी दुकान दिखाते हैं — यात्रा का समय बचाते हैं।",
     "features.verified.title": "सत्यापित फार्मेसियाँ",
-    "features.verified.desc": "प्रत्येक सूची अद्यतित इन्वेंट्री और मूल्य निर्धारण के साथ एक लाइसेंस प्राप्त फार्मेसी है।",
+    "features.verified.desc":
+      "प्रत्येक सूची अद्यतित इन्वेंट्री और मूल्य निर्धारण के साथ एक लाइसेंस प्राप्त फार्मेसी है।",
 
     // How it works
     "how.title": "आपके और आपकी दवा के बीच तीन कदम।",
@@ -313,7 +328,8 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "image.identified": "दवा की पहचान सफलतापूर्वक की गई",
     "image.match": "मैच",
     "image.searchStores": "इसके लिए दुकानों में खोजें",
-    "image.disclaimer": "अस्वीकरण: पूर्वावलोकन के लिए छवि पहचान का अनुकरण किया गया है। दवाओं को सत्यापित करने के लिए हमेशा एक लाइसेंस प्राप्त फार्मासिस्ट या चिकित्सक से परामर्श करें।",
+    "image.disclaimer":
+      "अस्वीकरण: पूर्वावलोकन के लिए छवि पहचान का अनुकरण किया गया है। दवाओं को सत्यापित करने के लिए हमेशा एक लाइसेंस प्राप्त फार्मासिस्ट या चिकित्सक से परामर्श करें।",
 
     "voice.title": "आवाज सहायक",
     "voice.listening": "सुन रहा है...",
@@ -331,7 +347,7 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.opennow": "अभी खुला है",
     "card.closed": "बंद है",
     "card.call": "कॉल करें",
-    "card.directions": "दिशा-निर्देश"
+    "card.directions": "दिशा-निर्देश",
   },
   fr: {
     // Nav
@@ -345,18 +361,22 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "hero.livestock": "Stock en direct de plus de 2 400 pharmacies",
     "hero.title1": "Trouvez n'importe quel médicament,",
     "hero.title2": "en quelques minutes — pas en heures.",
-    "hero.subtitle": "Arrêtez de courir de magasin en magasin. Recherchez un médicament et voyez la disponibilité, les prix et les directions en temps réel vers les pharmacies à proximité.",
+    "hero.subtitle":
+      "Arrêtez de courir de magasin en magasin. Recherchez un médicament et voyez la disponibilité, les prix et les directions en temps réel vers les pharmacies à proximité.",
     "hero.placeholder": "Rechercher un médicament, ex: Paracétamol",
     "hero.searchBtn": "Rechercher",
     "hero.try": "Essayer :",
 
     // Features
     "features.instant.title": "Résultats instantanés",
-    "features.instant.desc": "Recherchez une fois, voyez chaque pharmacie à proximité avec du stock en direct en moins d'une seconde.",
+    "features.instant.desc":
+      "Recherchez une fois, voyez chaque pharmacie à proximité avec du stock en direct en moins d'une seconde.",
     "features.distance.title": "Trié par distance",
-    "features.distance.desc": "Nous vous montrons d'abord le magasin le plus proche avec le meilleur prix — économisant du temps de voyage.",
+    "features.distance.desc":
+      "Nous vous montrons d'abord le magasin le plus proche avec le meilleur prix — économisant du temps de voyage.",
     "features.verified.title": "Pharmacies vérifiées",
-    "features.verified.desc": "Chaque annonce est une pharmacie agréée avec un inventaire et des prix à jour.",
+    "features.verified.desc":
+      "Chaque annonce est une pharmacie agréée avec un inventaire et des prix à jour.",
 
     // How it works
     "how.title": "Trois étapes entre vous et votre médicament.",
@@ -378,8 +398,10 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     // Auth
     "auth.welcome": "Bon retour",
     "auth.createAccount": "Créez votre compte",
-    "auth.signinSubtitle": "Connectez-vous pour enregistrer des pharmacies et suivre les médicaments.",
-    "auth.signupSubtitle": "Rejoignez Medily pour trouver des médicaments près de chez vous, plus rapidement.",
+    "auth.signinSubtitle":
+      "Connectez-vous pour enregistrer des pharmacies et suivre les médicaments.",
+    "auth.signupSubtitle":
+      "Rejoignez Medily pour trouver des médicaments près de chez vous, plus rapidement.",
     "auth.signin": "Se connecter",
     "auth.signup": "S'inscrire",
     "auth.fullname": "Nom complet",
@@ -414,14 +436,16 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     // Image/Voice search modals
     "image.title": "Scanner de diagnostic photo",
     "image.upload": "Télécharger la photo du médicament",
-    "image.drag": "Glissez-déposez une image de votre boîte/flacon de médicament ou choisissez un fichier local.",
+    "image.drag":
+      "Glissez-déposez une image de votre boîte/flacon de médicament ou choisissez un fichier local.",
     "image.browse": "Parcourir les photos",
     "image.webcam": "Utiliser la webcam",
     "image.demo": "Ou essayez un échantillon de démonstration",
     "image.identified": "Médicament identifié avec succès",
     "image.match": "Correspondance",
     "image.searchStores": "Rechercher des magasins pour",
-    "image.disclaimer": "Avis de non-responsabilité : L'identification de l'image est simulée pour l'aperçu. Consultez toujours un pharmacien ou un médecin pour vérifier vos médicaments.",
+    "image.disclaimer":
+      "Avis de non-responsabilité : L'identification de l'image est simulée pour l'aperçu. Consultez toujours un pharmacien ou un médecin pour vérifier vos médicaments.",
 
     "voice.title": "Assistant vocal",
     "voice.listening": "ÉCOUTE...",
@@ -439,8 +463,8 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.opennow": "Ouvert maintenant",
     "card.closed": "Fermé",
     "card.call": "Appeler",
-    "card.directions": "Itinéraire"
-  }
+    "card.directions": "Itinéraire",
+  },
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);

@@ -1,6 +1,21 @@
 import { initializeApp, getApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as fbSignOut, type Auth } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, writeBatch, type Firestore } from "firebase/firestore";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut as fbSignOut,
+  type Auth,
+} from "firebase/auth";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  writeBatch,
+  type Firestore,
+} from "firebase/firestore";
 import { getAnalytics, type Analytics } from "firebase/analytics";
 
 export type FirebaseConfig = {
@@ -92,12 +107,78 @@ export async function seedFirebase() {
     const batch = writeBatch(db);
 
     const BASE_PHARMACIES = [
-      { id: "p1", name: "Apollo Pharmacy", address: "MG Road, Sector 14", phone: "+91 98765 43210", distanceKm: 1.2, hours: "8:00 AM – 11:00 PM", open: true, rating: 4.7, lat: 28.47, lng: 77.08 },
-      { id: "p2", name: "MedPlus", address: "Park Street, Block B", phone: "+91 98123 45678", distanceKm: 2.0, hours: "24 hours", open: true, rating: 4.5, lat: 28.46, lng: 77.09 },
-      { id: "p3", name: "Netmeds Local", address: "Lake View Road", phone: "+91 90000 11122", distanceKm: 2.6, hours: "9:00 AM – 10:00 PM", open: true, rating: 4.3, lat: 28.48, lng: 77.07 },
-      { id: "p4", name: "Wellness Forever", address: "Crown Plaza, 2nd Ave", phone: "+91 99887 76655", distanceKm: 3.4, hours: "8:00 AM – 12:00 AM", open: true, rating: 4.6, lat: 28.45, lng: 77.06 },
-      { id: "p5", name: "Guardian Pharmacy", address: "Hill Road Junction", phone: "+91 91234 56789", distanceKm: 4.1, hours: "10:00 AM – 9:00 PM", open: false, rating: 4.2, lat: 28.49, lng: 77.10 },
-      { id: "p6", name: "1mg Express", address: "Tech Park Gate 3", phone: "+91 93456 12345", distanceKm: 4.8, hours: "9:00 AM – 11:00 PM", open: true, rating: 4.8, lat: 28.44, lng: 77.11 },
+      {
+        id: "p1",
+        name: "Apollo Pharmacy",
+        address: "MG Road, Sector 14",
+        phone: "+91 98765 43210",
+        distanceKm: 1.2,
+        hours: "8:00 AM – 11:00 PM",
+        open: true,
+        rating: 4.7,
+        lat: 28.47,
+        lng: 77.08,
+      },
+      {
+        id: "p2",
+        name: "MedPlus",
+        address: "Park Street, Block B",
+        phone: "+91 98123 45678",
+        distanceKm: 2.0,
+        hours: "24 hours",
+        open: true,
+        rating: 4.5,
+        lat: 28.46,
+        lng: 77.09,
+      },
+      {
+        id: "p3",
+        name: "Netmeds Local",
+        address: "Lake View Road",
+        phone: "+91 90000 11122",
+        distanceKm: 2.6,
+        hours: "9:00 AM – 10:00 PM",
+        open: true,
+        rating: 4.3,
+        lat: 28.48,
+        lng: 77.07,
+      },
+      {
+        id: "p4",
+        name: "Wellness Forever",
+        address: "Crown Plaza, 2nd Ave",
+        phone: "+91 99887 76655",
+        distanceKm: 3.4,
+        hours: "8:00 AM – 12:00 AM",
+        open: true,
+        rating: 4.6,
+        lat: 28.45,
+        lng: 77.06,
+      },
+      {
+        id: "p5",
+        name: "Guardian Pharmacy",
+        address: "Hill Road Junction",
+        phone: "+91 91234 56789",
+        distanceKm: 4.1,
+        hours: "10:00 AM – 9:00 PM",
+        open: false,
+        rating: 4.2,
+        lat: 28.49,
+        lng: 77.1,
+      },
+      {
+        id: "p6",
+        name: "1mg Express",
+        address: "Tech Park Gate 3",
+        phone: "+91 93456 12345",
+        distanceKm: 4.8,
+        hours: "9:00 AM – 11:00 PM",
+        open: true,
+        rating: 4.8,
+        lat: 28.44,
+        lng: 77.11,
+      },
     ];
 
     // Seed pharmacies
@@ -124,7 +205,7 @@ export async function seedFirebase() {
 
       // Generate simulated availability mapping for each pharmacy
       const availability: Record<string, { price: number; stock: number; available: boolean }> = {};
-      
+
       BASE_PHARMACIES.forEach((ph, index) => {
         const hash = docId.charCodeAt(0) + docId.charCodeAt(docId.length - 1) + index;
         const available = hash % 5 !== 0; // ~80% availability
@@ -133,14 +214,14 @@ export async function seedFirebase() {
         availability[ph.id] = {
           price: available ? price : 0,
           stock,
-          available
+          available,
         };
       });
 
       batch.set(medRef, {
         name: med.name,
         description: med.desc,
-        availability
+        availability,
       });
     }
 
@@ -198,12 +279,12 @@ export async function searchFirebaseMedicines(query: string) {
     Object.keys(pharmaciesMap).forEach((phId) => {
       const ph = pharmaciesMap[phId];
       const av = availability[phId] || { available: false, price: 0, stock: 0 };
-      
+
       results.push({
         ...ph,
         available: av.available,
         price: av.available ? av.price : undefined,
-        stock: av.stock
+        stock: av.stock,
       });
     });
 

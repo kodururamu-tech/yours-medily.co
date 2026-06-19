@@ -7,7 +7,20 @@ import { useLocation } from "../hooks/useLocation";
 
 export function PharmacyCard({ pharmacy, index }: { pharmacy: Pharmacy; index: number }) {
   const [fav, setFav] = useState(false);
-  const { available, price, name, address, phone, distanceKm, hours, open, rating, stock, lat, lng } = pharmacy;
+  const {
+    available,
+    price,
+    name,
+    address,
+    phone,
+    distanceKm,
+    hours,
+    open,
+    rating,
+    stock,
+    lat,
+    lng,
+  } = pharmacy;
   const { t } = useLanguage();
   const { coords: userCoords } = useLocation();
 
@@ -29,7 +42,8 @@ export function PharmacyCard({ pharmacy, index }: { pharmacy: Pharmacy; index: n
           </div>
           <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5 flex-wrap">
             <MapPin className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate max-w-[200px] sm:max-w-xs">{address}</span> · <span className="font-medium text-foreground whitespace-nowrap">{distanceKm} km</span>
+            <span className="truncate max-w-[200px] sm:max-w-xs">{address}</span> ·{" "}
+            <span className="font-medium text-foreground whitespace-nowrap">{distanceKm} km</span>
           </p>
         </div>
 

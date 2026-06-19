@@ -12,12 +12,7 @@ import {
   Eye,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 type Props = {
@@ -71,7 +66,8 @@ const MEDICINE_DATABASE: Record<string, MedicineMatch> = {
     confidence: 94,
     activeIngredients: "Azithromycin 500mg",
     category: "Macrolide Antibiotic",
-    description: "Used to treat various bacterial infections of the respiratory tract, skin, and ears.",
+    description:
+      "Used to treat various bacterial infections of the respiratory tract, skin, and ears.",
   },
   metformin: {
     name: "Metformin",
@@ -326,10 +322,34 @@ export function ImageSearch({ isOpen, onClose, onSearch }: Props) {
                   </p>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { name: "Paracetamol 500mg", key: "paracetamol", icon: "💊", colorStart: "#0ea5e9", colorEnd: "#0284c7" },
-                      { name: "Ibuprofen 400mg", key: "ibuprofen", icon: "🧪", colorStart: "#f43f5e", colorEnd: "#e11d48" },
-                      { name: "Amoxicillin 500mg", key: "amoxicillin", icon: "📦", colorStart: "#10b981", colorEnd: "#059669" },
-                      { name: "Cetirizine 10mg", key: "cetirizine", icon: "💧", colorStart: "#8b5cf6", colorEnd: "#7c3aed" },
+                      {
+                        name: "Paracetamol 500mg",
+                        key: "paracetamol",
+                        icon: "💊",
+                        colorStart: "#0ea5e9",
+                        colorEnd: "#0284c7",
+                      },
+                      {
+                        name: "Ibuprofen 400mg",
+                        key: "ibuprofen",
+                        icon: "🧪",
+                        colorStart: "#f43f5e",
+                        colorEnd: "#e11d48",
+                      },
+                      {
+                        name: "Amoxicillin 500mg",
+                        key: "amoxicillin",
+                        icon: "📦",
+                        colorStart: "#10b981",
+                        colorEnd: "#059669",
+                      },
+                      {
+                        name: "Cetirizine 10mg",
+                        key: "cetirizine",
+                        icon: "💧",
+                        colorStart: "#8b5cf6",
+                        colorEnd: "#7c3aed",
+                      },
                     ].map((sample) => (
                       <button
                         key={sample.key}
@@ -346,7 +366,7 @@ export function ImageSearch({ isOpen, onClose, onSearch }: Props) {
                             grad.addColorStop(1, sample.colorEnd);
                             ctx.fillStyle = grad;
                             ctx.fillRect(0, 0, 500, 360);
-                            
+
                             // Render a glossy metallic overlay
                             ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
                             ctx.beginPath();
@@ -406,7 +426,11 @@ export function ImageSearch({ isOpen, onClose, onSearch }: Props) {
                             ctx.fillRect(80, 222, 340, 6);
                             ctx.fillStyle = "#94a3b8";
                             ctx.font = "500 10px 'Plus Jakarta Sans', sans-serif";
-                            ctx.fillText("Rx Only • 10 Tablets • Keep out of reach of children", 145, 242);
+                            ctx.fillText(
+                              "Rx Only • 10 Tablets • Keep out of reach of children",
+                              145,
+                              242,
+                            );
 
                             const dataUrl = canvas.toDataURL("image/jpeg");
                             setImageSrc(dataUrl);
@@ -415,10 +439,16 @@ export function ImageSearch({ isOpen, onClose, onSearch }: Props) {
                         }}
                         className="flex items-center gap-2 p-2.5 rounded-xl border border-border bg-card hover:border-primary/40 hover:bg-secondary/40 transition-all text-left text-xs font-semibold cursor-pointer shadow-sm hover:scale-[1.01]"
                       >
-                        <span className="text-lg p-1.5 rounded-lg bg-secondary/80 flex items-center justify-center shrink-0">{sample.icon}</span>
+                        <span className="text-lg p-1.5 rounded-lg bg-secondary/80 flex items-center justify-center shrink-0">
+                          {sample.icon}
+                        </span>
                         <div className="flex flex-col">
-                          <span className="font-bold text-foreground">{sample.name.split(" ")[0]}</span>
-                          <span className="text-[10px] text-muted-foreground">{sample.name.split(" ")[1]}</span>
+                          <span className="font-bold text-foreground">
+                            {sample.name.split(" ")[0]}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {sample.name.split(" ")[1]}
+                          </span>
                         </div>
                       </button>
                     ))}
@@ -577,7 +607,8 @@ export function ImageSearch({ isOpen, onClose, onSearch }: Props) {
                 <div className="flex gap-2 text-xs text-muted-foreground/80 leading-relaxed">
                   <AlertCircle className="h-4 w-4 shrink-0 text-amber-500" />
                   <span>
-                    <strong>Disclaimer:</strong> Image identification is simulated for preview. Always consult a licensed pharmacist or physician to verify medications.
+                    <strong>Disclaimer:</strong> Image identification is simulated for preview.
+                    Always consult a licensed pharmacist or physician to verify medications.
                   </span>
                 </div>
 

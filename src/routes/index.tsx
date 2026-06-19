@@ -19,7 +19,10 @@ export const Route = createFileRoute("/")({
           "Search any medicine and instantly see availability, prices, distance, and contact info for pharmacies near you.",
       },
       { property: "og:title", content: "Medily — Medicine Availability Checker" },
-      { property: "og:description", content: "Real-time medicine availability across nearby pharmacies." },
+      {
+        property: "og:description",
+        content: "Real-time medicine availability across nearby pharmacies.",
+      },
     ],
   }),
   component: Index,
@@ -52,8 +55,12 @@ function Index() {
           <FirebaseSetup />
         </div>
         <nav className="hidden sm:flex items-center gap-7 text-sm text-muted-foreground">
-          <a href="#how" className="hover:text-foreground transition">{t("nav.how")}</a>
-          <a href="#why" className="hover:text-foreground transition">{t("nav.why")}</a>
+          <a href="#how" className="hover:text-foreground transition">
+            {t("nav.how")}
+          </a>
+          <a href="#why" className="hover:text-foreground transition">
+            {t("nav.why")}
+          </a>
           <UserMenu />
         </nav>
       </header>
@@ -165,9 +172,7 @@ function Index() {
           <div className="absolute -bottom-24 -left-10 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
           <div className="relative max-w-3xl">
             <p className="text-sm uppercase tracking-widest opacity-80 mb-3">{t("nav.how")}</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold leading-tight">
-              {t("how.title")}
-            </h2>
+            <h2 className="text-4xl sm:text-5xl font-semibold leading-tight">{t("how.title")}</h2>
             <div className="mt-10 grid sm:grid-cols-3 gap-6">
               {[
                 ["01", t("how.step1.title"), t("how.step1.desc")],
@@ -194,7 +199,9 @@ function Index() {
       </section>
 
       <footer className="max-w-6xl mx-auto px-6 py-10 text-sm text-muted-foreground flex flex-wrap items-center justify-between gap-4 border-t border-border">
-        <p>© {new Date().getFullYear()} {t("footer.care")}</p>
+        <p>
+          © {new Date().getFullYear()} {t("footer.care")}
+        </p>
         <p className="opacity-70">{t("footer.demo")}</p>
       </footer>
     </div>

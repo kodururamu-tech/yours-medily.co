@@ -38,15 +38,20 @@ export const Route = createFileRoute("/search")({
 type Filter = "all" | "available" | "open";
 
 const PHARMACY_COORDS_OFFSETS: Record<string, { lat: number; lng: number }> = {
-  p1: { lat: 0.005, lng: 0.006 },   // ~0.8 km
-  p2: { lat: -0.008, lng: 0.010 },  // ~1.3 km
-  p3: { lat: 0.012, lng: -0.014 },  // ~2.0 km
+  p1: { lat: 0.005, lng: 0.006 }, // ~0.8 km
+  p2: { lat: -0.008, lng: 0.01 }, // ~1.3 km
+  p3: { lat: 0.012, lng: -0.014 }, // ~2.0 km
   p4: { lat: -0.016, lng: -0.018 }, // ~2.7 km
-  p5: { lat: 0.022, lng: 0.024 },   // ~3.6 km
-  p6: { lat: -0.028, lng: 0.030 },  // ~4.4 km
+  p5: { lat: 0.022, lng: 0.024 }, // ~3.6 km
+  p6: { lat: -0.028, lng: 0.03 }, // ~4.4 km
 };
 
-function calculateHaversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+function calculateHaversineDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
   const R = 6371; // Earth's radius in km
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -69,8 +74,9 @@ function localHash(str: string) {
 function getLocalizedAddress(pharmacyId: string, index: number, cityName: string | null): string {
   if (!cityName) return "";
   const preset = CITY_PRESETS.find(
-    (c) => c.name.toLowerCase() === cityName.toLowerCase() || 
-           cityName.toLowerCase().includes(c.name.toLowerCase())
+    (c) =>
+      c.name.toLowerCase() === cityName.toLowerCase() ||
+      cityName.toLowerCase().includes(c.name.toLowerCase()),
   );
   if (preset && preset.addresses[index]) {
     return preset.addresses[index];
@@ -81,7 +87,7 @@ function getLocalizedAddress(pharmacyId: string, index: number, cityName: string
     `${cityName} Town Center`,
     `${cityName} Block A`,
     `${cityName} Junction`,
-    `${cityName} Tech Park`
+    `${cityName} Tech Park`,
   ];
   return fallbacks[index] || `${cityName} Area`;
 }
@@ -107,7 +113,9 @@ function SearchPage() {
       }
 
       if (!isFirebaseEnabled()) {
-        toast.error("Firebase is not configured. Please use the Database Settings panel to configure Firebase first.");
+        toast.error(
+          "Firebase is not configured. Please use the Database Settings panel to configure Firebase first.",
+        );
         setResults([]);
         return;
       }
@@ -123,7 +131,7 @@ function SearchPage() {
                   coords.lat,
                   coords.lng,
                   p.lat,
-                  p.lng
+                  p.lng,
                 );
                 return { ...p, distanceKm: calculatedDistance };
               }
@@ -154,7 +162,7 @@ function SearchPage() {
     let r = results;
     if (filter === "available") r = r.filter((p) => p.available);
     if (filter === "open") r = r.filter((p) => p.open);
-    
+
     if (sort === "distance") {
       r = [...r].sort((a, b) => {
         if (a.available !== b.available) return a.available ? -1 : 1;
@@ -172,9 +180,7 @@ function SearchPage() {
 
   const availableCount = results.filter((r) => r.available).length;
   const pricedResults = results.filter((r) => r.price !== undefined);
-  const minPrice = pricedResults.length > 0 
-    ? Math.min(...pricedResults.map((r) => r.price!))
-    : 0;
+  const minPrice = pricedResults.length > 0 ? Math.min(...pricedResults.map((r) => r.price!)) : 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -201,7 +207,7 @@ function SearchPage() {
                 <span className="font-display text-base sm:text-lg font-semibold">Medily</span>
               </Link>
             </div>
-            
+
             {/* Quick Action Badges / Controls in mobile (right-aligned in first row) */}
             <div className="flex items-center gap-2 sm:hidden shrink-0">
               <LocationSelector />
@@ -209,7 +215,7 @@ function SearchPage() {
               <UserMenu />
             </div>
           </div>
-          
+
           {/* Geolocation selector & Database selector (hidden on mobile first row, shown on desktop) */}
           <div className="hidden sm:flex items-center gap-3 shrink-0">
             <LocationSelector />
@@ -251,16 +257,17 @@ function SearchPage() {
               </h1>
               <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted-foreground">
                 <span>
-                  <span className="font-semibold text-foreground">{availableCount}</span> {t("search.of")}{" "}
-                  {results.length} {t("search.haveit")}
+                  <span className="font-semibold text-foreground">{availableCount}</span>{" "}
+                  {t("search.of")} {results.length} {t("search.haveit")}
                 </span>
                 {availableCount > 0 && (
                   <span>
-                    {t("search.from")} <span className="font-semibold text-foreground">₹{minPrice}</span>
+                    {t("search.from")}{" "}
+                    <span className="font-semibold text-foreground">₹{minPrice}</span>
                   </span>
                 )}
                 <span>{t("search.radius")}</span>
-                
+
                 {/* Geolocation Exact Finder */}
                 <button
                   onClick={() => detectLocation(true)}
@@ -280,11 +287,13 @@ function SearchPage() {
             {/* Filters */}
             <div className="mb-6 flex flex-wrap items-center gap-2 justify-between">
               <div className="flex flex-wrap gap-2">
-                {([
-                  ["all", t("search.filter.all")],
-                  ["available", t("search.filter.available")],
-                  ["open", t("search.filter.open")],
-                ] as const).map(([key, label]) => (
+                {(
+                  [
+                    ["all", t("search.filter.all")],
+                    ["available", t("search.filter.available")],
+                    ["open", t("search.filter.open")],
+                  ] as const
+                ).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setFilter(key)}
@@ -315,7 +324,9 @@ function SearchPage() {
             {loadingReal ? (
               <div className="flex flex-col items-center justify-center py-20 bg-card rounded-2xl border border-border">
                 <Loader2 className="h-8 w-8 animate-spin text-primary mb-3" />
-                <p className="text-muted-foreground font-medium">Scanning real pharmacies near you...</p>
+                <p className="text-muted-foreground font-medium">
+                  Scanning real pharmacies near you...
+                </p>
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20 bg-card rounded-2xl border border-border">

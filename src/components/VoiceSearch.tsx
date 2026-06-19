@@ -1,12 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Mic, MicOff, X, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 type Props = {
@@ -46,7 +41,9 @@ export function VoiceSearch({ isOpen, onClose, onResult }: Props) {
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      toast.error("Speech Recognition is not supported in this browser. Please try Chrome, Edge, or Safari.");
+      toast.error(
+        "Speech Recognition is not supported in this browser. Please try Chrome, Edge, or Safari.",
+      );
       onClose();
       return;
     }
@@ -101,7 +98,9 @@ export function VoiceSearch({ isOpen, onClose, onResult }: Props) {
       rec.onerror = (event: any) => {
         console.error("Speech recognition error", event);
         if (event.error === "not-allowed") {
-          toast.error("Microphone access blocked. Please allow microphone permission in your browser settings.");
+          toast.error(
+            "Microphone access blocked. Please allow microphone permission in your browser settings.",
+          );
         } else {
           toast.error(`Voice Search Error: ${event.error}`);
         }
@@ -198,9 +197,7 @@ export function VoiceSearch({ isOpen, onClose, onResult }: Props) {
                 isListening ? "bg-destructive" : "bg-primary"
               }`}
               style={{
-                background: isListening
-                  ? undefined
-                  : "var(--gradient-hero)",
+                background: isListening ? undefined : "var(--gradient-hero)",
               }}
             >
               {isListening ? (
@@ -237,9 +234,7 @@ export function VoiceSearch({ isOpen, onClose, onResult }: Props) {
                     "{transcript}"
                   </div>
                 ) : (
-                  <p className="text-sm font-medium text-muted-foreground">
-                    Voice search stopped
-                  </p>
+                  <p className="text-sm font-medium text-muted-foreground">Voice search stopped</p>
                 )}
                 <button
                   onClick={startListening}

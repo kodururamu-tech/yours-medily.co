@@ -50,7 +50,7 @@ export function SearchBar({ initial = "", onSearch, size = "lg" }: Props) {
             isLg ? "text-lg" : "text-sm"
           }`}
         />
-        
+
         {/* Search Assistant Tools */}
         <div className="flex items-center gap-0.5 shrink-0 mr-1.5">
           {value && (
@@ -63,7 +63,7 @@ export function SearchBar({ initial = "", onSearch, size = "lg" }: Props) {
               <X className="h-4 w-4" />
             </button>
           )}
-          
+
           {/* Voice Search Mic Button */}
           <button
             type="button"
