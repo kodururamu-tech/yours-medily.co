@@ -10,7 +10,7 @@ export type LocationContextType = {
   coords: Coordinates | null;
   cityName: string | null;
   locating: boolean;
-  detectLocation: (useGps?: boolean) => Promise<void>;
+  detectLocation: (useGps?: boolean, silent?: boolean) => Promise<void>;
   setManualLocation: (cityName: string, coords: Coordinates) => void;
 };
 
@@ -149,7 +149,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return false;
   };
 
-  const detectLocation = async (useGps = false) => {
+  const detectLocation = async (useGps = false, silent = false) => {
     setLocating(true);
 
     // If user explicitly requests GPS
@@ -169,7 +169,13 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${newCoords.lat}&longitude=${newCoords.lng}&localityLanguage=en`,
               );
               const data = await res.json();
-              const name = data.city || data.locality || "Current Location";
+
+              // Build precise location name combining locality and city
+              const name =
+                data.locality && data.city && data.locality !== data.city
+                  ? `${data.locality}, ${data.city}`
+                  : data.locality || data.city || "Current Location";
+
               setCityName(name);
               localStorage.setItem("medily_coords", JSON.stringify(newCoords));
               localStorage.setItem("medily_city", name);
@@ -180,16 +186,20 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             }
 
             setLocating(false);
-            toast.success("Successfully set location using GPS!");
+            if (!silent) {
+              toast.success("Successfully set location using GPS!");
+            }
             resolve();
           },
           async (error) => {
             console.error("GPS error:", error);
-            let msg = "Could not get GPS location.";
-            if (error.code === error.PERMISSION_DENIED) {
-              msg = "Location access denied. Please allow permissions or select a city.";
+            if (!silent) {
+              let msg = "Could not get GPS location.";
+              if (error.code === error.PERMISSION_DENIED) {
+                msg = "Location access denied. Please allow permissions or select a city.";
+              }
+              toast.error(msg);
             }
-            toast.error(msg);
 
             // Fallback to IP if GPS fails
             await detectLocationByIp();
@@ -215,7 +225,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   useEffect(() => {
-    // Automatically detect location on first load
+    // Automatically detect location on first load, trying GPS first silently
     const storedCoords = localStorage.getItem("medily_coords");
     const storedCity = localStorage.getItem("medily_city");
     if (storedCoords && storedCity) {
@@ -223,10 +233,10 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setCoords(JSON.parse(storedCoords));
         setCityName(storedCity);
       } catch {
-        detectLocation(false);
+        detectLocation(true, true);
       }
     } else {
-      detectLocation(false);
+      detectLocation(true, true);
     }
   }, []);
 

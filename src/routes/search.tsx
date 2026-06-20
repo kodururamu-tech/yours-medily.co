@@ -150,8 +150,8 @@ function SearchPage() {
           if (coords) {
             const mapped = fbResults.map((p, idx) => {
               const offset = PHARMACY_COORDS_OFFSETS[p.id] || { lat: 0, lng: 0 };
-              const pharmacyLat = coords.lat + offset.lat;
-              const pharmacyLng = coords.lng + offset.lng;
+              const pharmacyLat = p.lat !== undefined ? p.lat : coords.lat + offset.lat;
+              const pharmacyLng = p.lng !== undefined ? p.lng : coords.lng + offset.lng;
               const calculatedDistance = calculateHaversineDistance(
                 coords.lat,
                 coords.lng,
