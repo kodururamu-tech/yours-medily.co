@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Pill, MapPin, Zap, ShieldCheck, ArrowRight } from "lucide-react";
+import { Pill, MapPin, Zap, ShieldCheck, ArrowRight, Compass, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { UserMenu } from "@/components/UserMenu";
 import { POPULAR_MEDICINES } from "@/lib/mock-data";
 import { useLanguage } from "../hooks/useLanguage";
+import { useLocation } from "../hooks/useLocation";
 import { LocationSelector } from "@/components/LocationSelector";
 import { FirebaseSetup } from "@/components/FirebaseSetup";
 
@@ -31,10 +32,16 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = Route.useNavigate();
   const { t } = useLanguage();
+  const { detectLocation, locating } = useLocation();
   const [recent] = useState<string[]>([]);
 
   const onSearch = (q: string) => {
     navigate({ to: "/search", search: { q } });
+  };
+
+  const handleLocateNearMe = async () => {
+    await detectLocation(true);
+    navigate({ to: "/search" });
   };
 
   return (
@@ -109,6 +116,7 @@ function Index() {
           className="mt-10 max-w-2xl mx-auto"
         >
           <SearchBar onSearch={onSearch} />
+
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
             <span className="text-xs text-muted-foreground mr-1">{t("hero.try")}</span>
             {POPULAR_MEDICINES.slice(0, 6).map((m) => (
@@ -120,6 +128,21 @@ function Index() {
                 {m}
               </button>
             ))}
+          </div>
+
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <button
+              onClick={handleLocateNearMe}
+              disabled={locating}
+              className="inline-flex items-center gap-2 px-6 h-12 rounded-full font-semibold text-sm transition bg-card hover:bg-secondary/40 border border-border text-foreground hover:border-primary/30 hover:scale-[1.01] active:scale-[0.99] cursor-pointer disabled:opacity-60 shadow-[var(--shadow-card)]"
+            >
+              {locating ? (
+                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+              ) : (
+                <Compass className="h-4 w-4 text-primary" />
+              )}
+              <span>{t("gps.locate")}</span>
+            </button>
           </div>
         </motion.div>
       </section>

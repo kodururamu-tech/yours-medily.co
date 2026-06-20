@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { User, LogOut, LogIn } from "lucide-react";
 import { auth, isFirebaseEnabled } from "@/lib/firebase";
+import { useLanguage } from "../hooks/useLanguage";
 
 interface UserData {
   name: string;
@@ -13,6 +14,7 @@ export function UserMenu() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<UserData | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     try {
@@ -54,13 +56,13 @@ export function UserMenu() {
           to="/signin"
           className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-foreground transition"
         >
-          Sign in
+          {t("nav.signin")}
         </Link>
         <Link
           to="/signin"
           className="px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition"
         >
-          Get started
+          {t("nav.getStarted")}
         </Link>
       </div>
     );
@@ -89,7 +91,7 @@ export function UserMenu() {
             className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-destructive hover:bg-destructive/10 transition"
           >
             <LogOut className="h-4 w-4" />
-            Sign out
+            {t("auth.signout")}
           </button>
         </div>
       )}

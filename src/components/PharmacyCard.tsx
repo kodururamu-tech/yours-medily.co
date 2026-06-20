@@ -2,8 +2,10 @@ import { Phone, MapPin, Clock, Navigation, Heart, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import type { Pharmacy } from "@/lib/mock-data";
+import { POPULAR_MEDICINES } from "@/lib/mock-data";
 import { useLanguage } from "../hooks/useLanguage";
 import { useLocation } from "../hooks/useLocation";
+import { useNavigate } from "@tanstack/react-router";
 
 export function PharmacyCard({ pharmacy, index }: { pharmacy: Pharmacy; index: number }) {
   const [fav, setFav] = useState(false);
@@ -23,6 +25,28 @@ export function PharmacyCard({ pharmacy, index }: { pharmacy: Pharmacy; index: n
   } = pharmacy;
   const { t } = useLanguage();
   const { coords: userCoords } = useLocation();
+  const navigate = useNavigate();
+
+  // Generate deterministic in-stock medicines for preview if available is undefined
+  const getMockMedicines = () => {
+    const list = POPULAR_MEDICINES.slice(0, 4);
+    return list
+      .map((med) => {
+        const docId = med.toLowerCase();
+        const phIndex = parseInt(pharmacy.id.replace("p", "")) || 0;
+        const seed = docId.charCodeAt(0) + docId.charCodeAt(docId.length - 1) + phIndex;
+        const isAvail = seed % 5 !== 0;
+        const mockPrice = 15 + (seed % 80);
+        return {
+          name: med,
+          available: isAvail,
+          price: mockPrice,
+        };
+      })
+      .filter((m) => m.available);
+  };
+
+  const mockMeds = getMockMedicines();
 
   return (
     <motion.article
@@ -56,35 +80,71 @@ export function PharmacyCard({ pharmacy, index }: { pharmacy: Pharmacy; index: n
         </button>
       </div>
 
-      <div className="mt-5 flex items-end justify-between gap-4">
-        <div>
-          {available ? (
-            <>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/12 text-success text-xs font-semibold">
-                <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                {t("card.available")} · {stock} {t("card.stock")}
-              </span>
-              <div className="mt-3 flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-foreground font-display">₹{price}</span>
-                <span className="text-xs text-muted-foreground">/ {t("card.strip")}</span>
-              </div>
-            </>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-destructive/10 text-destructive text-xs font-semibold">
-              {t("card.notAvailable")}
-            </span>
-          )}
-        </div>
+      <div className="mt-5 border-t border-border/40 pt-4 flex flex-col gap-4">
+        {available !== undefined ? (
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              {available ? (
+                <>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/12 text-success text-xs font-semibold">
+                    <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                    {t("card.available")} · {stock} {t("card.stock")}
+                  </span>
+                  <div className="mt-3 flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-foreground font-display">
+                      ₹{price}
+                    </span>
+                    <span className="text-xs text-muted-foreground">/ {t("card.strip")}</span>
+                  </div>
+                </>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-destructive/10 text-destructive text-xs font-semibold">
+                  {t("card.notAvailable")}
+                </span>
+              )}
+            </div>
 
-        <div className="text-right text-xs text-muted-foreground space-y-1">
-          <div className="flex items-center justify-end gap-1.5">
-            <Clock className="h-3 w-3" />
-            <span>{hours}</span>
+            <div className="text-right text-xs text-muted-foreground space-y-1">
+              <div className="flex items-center justify-end gap-1.5">
+                <Clock className="h-3 w-3" />
+                <span>{hours}</span>
+              </div>
+              <div className={open ? "text-success font-medium" : "text-destructive font-medium"}>
+                {open ? t("card.opennow") : t("card.closed")}
+              </div>
+            </div>
           </div>
-          <div className={open ? "text-success font-medium" : "text-destructive font-medium"}>
-            {open ? t("card.opennow") : t("card.closed")}
+        ) : (
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-3 w-3" />
+                <span>{hours}</span>
+              </div>
+              <div className={open ? "text-success font-medium" : "text-destructive font-medium"}>
+                {open ? t("card.opennow") : t("card.closed")}
+              </div>
+            </div>
+
+            <div className="mt-1">
+              <p className="text-xs font-semibold text-muted-foreground mb-2">
+                {t("card.inStockMeds")}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {mockMeds.map((med) => (
+                  <button
+                    key={med.name}
+                    onClick={() => navigate({ to: "/search", search: { q: med.name } })}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/80 hover:bg-primary/10 hover:text-primary transition-colors text-xs font-medium text-foreground cursor-pointer border border-border"
+                  >
+                    <span>{med.name}</span>
+                    <span className="text-[10px] text-muted-foreground">₹{med.price}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="mt-5 pt-5 border-t border-border flex gap-2">

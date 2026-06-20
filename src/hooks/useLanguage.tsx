@@ -121,6 +121,24 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.closed": "Closed",
     "card.call": "Call",
     "card.directions": "Directions",
+
+    // Location Selector
+    "location.select": "Select Location",
+    "location.detect": "Detect Current Location",
+    "location.popular": "Popular Cities",
+    "location.gps": "GPS",
+
+    // GPS / Locating
+    "gps.locate": "Locate Nearest GPS Shops",
+    "gps.shopsIn": "Shops in {city}",
+    "gps.usePrecise": "Use Precise GPS Location",
+
+    // Search dashboard
+    "search.scanning": "Scanning real pharmacies near you...",
+    "search.nearestTitle": "Nearest Pharmacies to You",
+    "search.nearestSub": "Compare prices and check stock at these nearby stores",
+    "search.searchThisShop": "Search medicine in this shop",
+    "card.inStockMeds": "Popular In-Stock Medicines:",
   },
   es: {
     // Nav
@@ -235,6 +253,24 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.closed": "Cerrado",
     "card.call": "Llamar",
     "card.directions": "Cómo llegar",
+
+    // Location Selector
+    "location.select": "Seleccionar ubicación",
+    "location.detect": "Detectar ubicación actual",
+    "location.popular": "Ciudades populares",
+    "location.gps": "GPS",
+
+    // GPS / Locating
+    "gps.locate": "Localizar tiendas GPS más cercanas",
+    "gps.shopsIn": "Tiendas en {city}",
+    "gps.usePrecise": "Usar ubicación GPS precisa",
+
+    // Search dashboard
+    "search.scanning": "Escaneando farmacias reales cerca de ti...",
+    "search.nearestTitle": "Farmacias más cercanas a ti",
+    "search.nearestSub": "Compara precios y verifica el stock en estas tiendas cercanas",
+    "search.searchThisShop": "Buscar medicamentos en esta tienda",
+    "card.inStockMeds": "Medicamentos populares en stock:",
   },
   hi: {
     // Nav
@@ -348,6 +384,24 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.closed": "बंद है",
     "card.call": "कॉल करें",
     "card.directions": "दिशा-निर्देश",
+
+    // Location Selector
+    "location.select": "स्थान चुनें",
+    "location.detect": "वर्तमान स्थान का पता लगाएं",
+    "location.popular": "लोकप्रिय शहर",
+    "location.gps": "जीपीएस",
+
+    // GPS / Locating
+    "gps.locate": "निकटतम जीपीएस दुकानें खोजें",
+    "gps.shopsIn": "{city} में दुकानें",
+    "gps.usePrecise": "सटीक जीपीएस स्थान का उपयोग करें",
+
+    // Search dashboard
+    "search.scanning": "आपके आस-पास की वास्तविक फार्मेसियों को स्कैन किया जा रहा है...",
+    "search.nearestTitle": "आपके निकटतम फार्मेसियाँ",
+    "search.nearestSub": "इन नजदीकी दुकानों पर कीमतों की तुलना करें और स्टॉक की जांच करें",
+    "search.searchThisShop": "इस दुकान में दवा खोजें",
+    "card.inStockMeds": "स्टॉक में लोकप्रिय दवाएं:",
   },
   fr: {
     // Nav
@@ -464,6 +518,24 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     "card.closed": "Fermé",
     "card.call": "Appeler",
     "card.directions": "Itinéraire",
+
+    // Location Selector
+    "location.select": "Sélectionner l'emplacement",
+    "location.detect": "Détecter la position actuelle",
+    "location.popular": "Villes populaires",
+    "location.gps": "GPS",
+
+    // GPS / Locating
+    "gps.locate": "Localiser les magasins GPS les plus proches",
+    "gps.shopsIn": "Magasins à {city}",
+    "gps.usePrecise": "Utiliser la localisation GPS précise",
+
+    // Search dashboard
+    "search.scanning": "Recherche de pharmacies réelles près de chez vous...",
+    "search.nearestTitle": "Pharmacies les plus proches de chez vous",
+    "search.nearestSub": "Comparez les prix et vérifiez le stock dans ces magasins à proximité",
+    "search.searchThisShop": "Rechercher des médicaments dans ce magasin",
+    "card.inStockMeds": "Médicaments populaires en stock :",
   },
 };
 

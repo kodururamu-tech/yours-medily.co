@@ -4,6 +4,7 @@ import { Pill, Mail, Lock, User, ArrowRight, LogOut } from "lucide-react";
 import { useState, useEffect, type FormEvent } from "react";
 import { useLanguage, type Language } from "../hooks/useLanguage";
 import { auth, db, isFirebaseEnabled } from "@/lib/firebase";
+import { FirebaseSetup } from "@/components/FirebaseSetup";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -72,10 +73,13 @@ function SignInPage() {
     setLoading(true);
 
     if (!isFirebaseEnabled() || !auth) {
-      setError(
-        "Firebase is not configured. Please configure your Firebase configuration via the database settings button at the top of the page first.",
-      );
-      setLoading(false);
+      // Simulate local login / registration in offline demo mode
+      setTimeout(() => {
+        const userName = name || email.split("@")[0];
+        localStorage.setItem("medily_user", JSON.stringify({ name: userName, email }));
+        setLoading(false);
+        navigate({ to: "/" });
+      }, 800);
       return;
     }
 
@@ -138,15 +142,18 @@ function SignInPage() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--gradient-soft)" }}>
       <header className="max-w-6xl w-full mx-auto px-6 py-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div
-            className="h-9 w-9 rounded-xl flex items-center justify-center text-primary-foreground"
-            style={{ background: "var(--gradient-hero)" }}
-          >
-            <Pill className="h-5 w-5" />
-          </div>
-          <span className="font-display text-xl font-semibold tracking-tight">Medily</span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2">
+            <div
+              className="h-9 w-9 rounded-xl flex items-center justify-center text-primary-foreground"
+              style={{ background: "var(--gradient-hero)" }}
+            >
+              <Pill className="h-5 w-5" />
+            </div>
+            <span className="font-display text-xl font-semibold tracking-tight">Medily</span>
+          </Link>
+          <FirebaseSetup />
+        </div>
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition">
           {t("nav.backHome")}
         </Link>

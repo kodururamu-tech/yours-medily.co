@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { MapPin, Compass, ChevronDown, Check, Loader2 } from "lucide-react";
 import { useLocation, CITY_PRESETS } from "../hooks/useLocation";
+import { useLanguage } from "../hooks/useLanguage";
 
 export function LocationSelector() {
   const { coords, cityName, locating, detectLocation, setManualLocation } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -29,7 +31,7 @@ export function LocationSelector() {
         className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-sm font-medium hover:border-primary/40 transition hover:bg-secondary/40 cursor-pointer text-foreground"
       >
         <MapPin className="h-4 w-4 text-primary" />
-        <span className="max-w-[120px] truncate">{cityName || "Select Location"}</span>
+        <span className="max-w-[120px] truncate">{cityName || t("location.select")}</span>
         <ChevronDown className="h-3 w-3 text-muted-foreground" />
       </button>
 
@@ -46,17 +48,17 @@ export function LocationSelector() {
               ) : (
                 <Compass className="h-4 w-4 text-primary" />
               )}
-              <span>Detect Current Location</span>
+              <span>{t("location.detect")}</span>
             </div>
             <span className="text-[10px] text-muted-foreground bg-secondary px-1.5 py-0.5 rounded-md">
-              GPS
+              {t("location.gps")}
             </span>
           </button>
 
           <div className="my-1.5 border-t border-border" />
 
           <div className="px-3 py-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Popular Cities
+            {t("location.popular")}
           </div>
 
           <div className="max-h-56 overflow-y-auto mt-1 space-y-0.5 pr-1">

@@ -25,7 +25,7 @@ export const POPULAR_MEDICINES = [
   "Aspirin",
 ];
 
-const BASE_PHARMACIES: Omit<Pharmacy, "available" | "price" | "stock">[] = [
+export const BASE_PHARMACIES: Omit<Pharmacy, "available" | "price" | "stock">[] = [
   {
     id: "p1",
     name: "Apollo Pharmacy",

@@ -58,7 +58,16 @@ export function getFirebaseConfig(): FirebaseConfig | null {
     return envConfig as FirebaseConfig;
   }
 
-  return null;
+  // Fallback to the default configuration if environment variables are not resolved
+  return {
+    apiKey: "AIzaSyDLsOUQhlZ_Tp8toTma4LK0YY1lwlE8J3E",
+    authDomain: "medi-spot-e8d8b.firebaseapp.com",
+    projectId: "medi-spot-e8d8b",
+    storageBucket: "medi-spot-e8d8b.firebasestorage.app",
+    messagingSenderId: "371543431903",
+    appId: "1:371543431903:web:5c137a7ae7cfa94057e76a",
+    measurementId: "G-0RNCMD09C9",
+  };
 }
 
 let app: FirebaseApp | null = null;
@@ -251,8 +260,8 @@ export async function searchFirebaseMedicines(query: string) {
 
     // 2. Fetch the medicine document from Firestore
     // We try to match exactly first
-    let medDocRef = doc(db, "medicines", q);
-    let medDocSnap = await getDoc(medDocRef);
+    const medDocRef = doc(db, "medicines", q);
+    const medDocSnap = await getDoc(medDocRef);
 
     // If exact document doesn't exist, search the medicines collection for partial match
     let medicineData: any = null;
@@ -295,5 +304,22 @@ export async function searchFirebaseMedicines(query: string) {
   } catch (error) {
     console.error("Error searching in Firebase:", error);
     throw error;
+  }
+}
+
+// Function to fetch all pharmacies from Firebase
+export async function fetchFirebasePharmacies() {
+  if (!db) return [];
+
+  try {
+    const phSnapshot = await getDocs(collection(db, "pharmacies"));
+    const results: any[] = [];
+    phSnapshot.forEach((doc) => {
+      results.push(doc.data());
+    });
+    return results;
+  } catch (error) {
+    console.error("Error fetching pharmacies from Firebase:", error);
+    return [];
   }
 }

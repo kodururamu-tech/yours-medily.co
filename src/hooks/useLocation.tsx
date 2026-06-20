@@ -109,22 +109,42 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [cityName, setCityName] = useState<string | null>(null);
   const [locating, setLocating] = useState(false);
 
-  // Detect location via IP (fast, zero-prompt)
+  // Detect location via IP (fast, zero-prompt) with multiple API fallbacks
   const detectLocationByIp = async () => {
+    // 1. Try ipapi.co
     try {
       const res = await fetch("https://ipapi.co/json/");
-      if (!res.ok) throw new Error("IP Geolocation failed");
-      const data = await res.json();
-      if (data.latitude && data.longitude) {
-        const newCoords = { lat: data.latitude, lng: data.longitude };
-        setCoords(newCoords);
-        setCityName(data.city || "Nearby");
-        localStorage.setItem("medily_coords", JSON.stringify(newCoords));
-        localStorage.setItem("medily_city", data.city || "Nearby");
-        return true;
+      if (res.ok) {
+        const data = await res.json();
+        if (data.latitude && data.longitude) {
+          const newCoords = { lat: data.latitude, lng: data.longitude };
+          setCoords(newCoords);
+          setCityName(data.city || "Nearby");
+          localStorage.setItem("medily_coords", JSON.stringify(newCoords));
+          localStorage.setItem("medily_city", data.city || "Nearby");
+          return true;
+        }
       }
     } catch (e) {
-      console.warn("Failed to get location by IP:", e);
+      console.warn("Failed to get location by ipapi.co, trying backup API...", e);
+    }
+
+    // 2. Try freeipapi.com (backup)
+    try {
+      const res = await fetch("https://freeipapi.com/api/json");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.latitude && data.longitude) {
+          const newCoords = { lat: data.latitude, lng: data.longitude };
+          setCoords(newCoords);
+          setCityName(data.cityName || "Nearby");
+          localStorage.setItem("medily_coords", JSON.stringify(newCoords));
+          localStorage.setItem("medily_city", data.cityName || "Nearby");
+          return true;
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to get location by backup freeipapi.com:", e);
     }
     return false;
   };
